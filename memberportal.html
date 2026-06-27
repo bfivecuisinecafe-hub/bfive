@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B5 Member Portal</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#f6f1e8;
+color:#4b3b2a;
+}
+
+.header{
+background:#6b4e36;
+color:white;
+padding:18px;
+text-align:center;
+font-size:18px;
+font-weight:bold;
+}
+
+.container{
+padding:15px;
+max-width:600px;
+margin:auto;
+}
+
+.card{
+background:white;
+padding:16px;
+border-radius:14px;
+margin-bottom:12px;
+box-shadow:0 6px 16px rgba(0,0,0,0.08);
+}
+
+*{box-sizing:border-box;}
+
+input, button{
+width:100%;
+max-width:100%;
+padding:12px;
+border-radius:10px;
+margin-bottom:10px;
+font-size:14px;
+}
+
+input{border:1px solid #ddd;outline:none;}
+input:focus{border-color:#6b4e36;box-shadow:0 0 0 2px rgba(107,78,54,0.15);}
+
+button{
+background:#6b4e36;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+.title{font-weight:bold;margin-bottom:10px;}
+.big{font-size:22px;font-weight:bold;}
+.small{font-size:12px;color:#888;}
+
+.reward-item{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:8px;
+padding:10px 0;
+border-bottom:1px solid #eee;
+}
+
+.reward-left{
+flex:1;
+min-width:0;
+font-size:13px;
+line-height:1.4;
+}
+
+.badge{
+flex-shrink:0;
+white-space:nowrap;
+font-size:11px;
+padding:3px 6px;
+background:#f3f4f6;
+border-radius:8px;
+font-weight:bold;
+}
+
+.disabled{opacity:0.5;pointer-events:none;}
+.hide{display:none;}
+
+.reward-card{
+display:flex;
+align-items:center;
+gap:12px;
+padding:12px 0;
+border-bottom:1px solid #eee;
+}
+
+.reward-image{
+width:60px;
+height:60px;
+border-radius:10px;
+object-fit:cover;
+background:#f3f3f3;
+flex-shrink:0;
+}
+
+.reward-info{flex:1;}
+
+.stamp{
+width:100%;
+aspect-ratio:1;
+max-width:40px;
+margin:auto;border-radius:50%;
+border:2px dashed #cfcfcf;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:10px;
+font-weight:bold;
+color:#cfcfcf;
+background:#fafafa;
+margin:auto;
+}
+.stamp.active{
+background:#6b4e36;
+border-color:#6b4e36;
+color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">🎁 B5 Member Portal</div>
+
+<div class="container">
+
+<div class="card" id="searchBox">
+<div class="title">🔍 Member Lookup</div>
+<input id="phone" placeholder="Phone Number" onblur="normalizePhone(this)">
+<input id="email" placeholder="Email">
+<button onclick="search()">Search</button>
+</div>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+function safe(v, def){
+return (v === undefined || v === null) ? def : v;
+}
+
+async function search(){
+
+let phone=document.getElementById("phone").value.trim();
+let email=document.getElementById("email").value.trim();
+
+if(!phone && !email){
+alert("Enter phone or email");
+return;
+}
+
+let url="https://script.google.com/macros/s/AKfycbxhEOzgr23fH-ooOfYPl9QqDMAvX_w7sC3bDjt9ErImqSROb8Qfvkkl-EWy7hRwr_H-/exec?mode=member";
+
+if(phone) url+="&phone="+phone;
+if(email) url+="&email="+email;
+
+let res=await fetch(url);
+let data=await res.json();
+
+if(data.status!=="ok"){
+document.getElementById("result").innerHTML="<div class='card'>No member found</div>";
+return;
+}
+
+let m=data.data;
+
+document.getElementById("searchBox").style.display="none";
+
+const stamp = m.stamp || { current:0, limit:7 };
+const referral = m.referral || { total:0, tier:"Member" };
+const settings = m.settings || {};
+const points = m.points || { balance:0, expiry:"-" };
+
+document.getElementById("result").innerHTML=`
+
+<div class="card">
+<button onclick="location.reload()">🔍 New Search</button>
+</div>
+
+<div class="card">
+<div class="title">👤 Profile</div>
+<b>${m.profile?.name || "-"}</b><br>
+${m.profile?.phone || "-"}<br>
+${m.profile?.email || "-"}<br>
+<span class="small">Member since: ${m.profile?.memberSince || "-"}</span>
+</div>
+
+<div class="card">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+">
+
+<div>
+
+<div class="title">💰 Points</div>
+
+<div class="big">
+${points.balance}
+</div>
+
+<div class="small">
+Expiry: ${points.expiry || "-"}
+</div>
+
+</div>
+
+<div style="
+text-align:right;
+">
+
+<div style="
+font-weight:bold;
+font-size:15px;
+">
+
+${referral.total >= 50 ? "💎 Platinum" :
+ referral.total >= 35 ? "🥇 Gold" :
+ referral.total >= 20 ? "🥈 Silver" :
+ referral.total >= 9 ? "🥉 Bronze" :
+ "👤 Member"}
+
+</div>
+
+<div class="small">
+
+${referral.total >= 50 ? "20% Discount" :
+ referral.total >= 35 ? "15% Discount" :
+ referral.total >= 20 ? "10% Discount" :
+ referral.total >= 9 ? "5% Discount" :
+ "0% Discount"}
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+<div class="title">⭐ Monthly Visit Stamp</div>
+
+<div style="font-size:13px;color:#666;margin-bottom:12px;">
+Progress: ${stamp.current} / ${stamp.limit}
+</div>
+
+<div style="
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:4px;
+margin-bottom:15px;">${Array.from({ length: stamp.limit }).map((_, i) => {
+return `<div class="stamp ${i < stamp.current ? "active":""}">B5</div>`;
+}).join("")}
+</div>
+
+<div class="reward-item">
+<div class="reward-left">
+🎁 <b>3 Stamp</b>
+
+<div class="small">
+${settings.stampReward3 || "-"}
+</div>
+
+</div>
+<div class="badge">
+${stamp.current >= 3 ? "✅ Available" : `⭐ Need ${3 - stamp.current}`}
+</div>
+
+</div>
+
+<div class="reward-item">
+<div class="reward-left">
+🎁 <b>7 Stamp</b>
+
+<div class="small">
+${settings.stampReward7 || "-"}
+</div>
+
+</div>
+
+<div class="badge">
+${stamp.current >= 7 ? "✅ Available" : `⭐ Need ${7 - stamp.current}`}
+</div>
+
+</div>
+
+<div style="
+margin-top:10px;
+font-size:12px;
+color:#888;
+text-align:center;
+">
+🔄 Monthly Visit Stamps reset on the 1st day of every month
+</div>
+
+</div>
+<div class="card">
+
+<div class="title">👥 Referral Journey</div>
+
+<div style="margin-bottom:8px;">
+Total Referrals: <b>${referral.total}</b>
+</div>
+
+<!-- PROGRESS BAR -->
+
+<div style="
+position:relative;
+margin-bottom:25px;
+">
+
+<div style="
+height:18px;
+background:#e5e5e5;
+border-radius:30px;
+overflow:hidden;
+">
+
+<div style="
+height:100%;
+width:${Math.min((referral.total/50)*100,100)}%;
+background:#22C55E;
+transition:0.5s;
+">
+</div>
+
+</div>
+
+<!-- MILESTONE MARKERS -->
+
+<div style="
+position:relative;
+height:30px;
+margin-top:8px;
+font-size:11px;
+">
+
+${[3,6,9,20,35,50].map(m=>`
+
+<div style="
+position:absolute;
+left:calc(${(m/50)*100}% - 6px);
+transform:translateX(-50%);
+text-align:center;
+font-weight:bold;
+color:${referral.total>=m ? '#22C55E' : '#999'};
+">
+
+${m}
+
+</div>
+
+`).join("")}
+
+</div>
+
+</div>
+
+<!-- REFERRAL REWARDS -->
+
+<div class="reward-item">
+<div class="reward-left">
+🎁 <b>3 Referrals</b>
+
+<div class="small">
+${settings.referralMilestone3 || "-"}
+</div>
+
+</div><div class="badge">
+${referral.total >= 3 ? "✅ Available" : `⭐ Need ${3-referral.total}`}
+</div>
+</div>
+
+<div class="reward-item">
+<div class="reward-left">
+🎁 <b>6 Referrals</b>
+
+<div class="small">
+${settings.referralMilestone6 || "-"}
+</div>
+
+</div><div class="badge">
+${referral.total >= 6 ? "✅ Available" : `⭐ Need ${6-referral.total}`}
+</div>
+</div>
+
+<div class="reward-item" style="border-bottom:none;">
+<div class="reward-left">
+🎁 <b>9 Referrals</b>
+
+<div class="small">
+${settings.referralMilestone9 || "-"}
+</div>
+
+</div><div class="badge">
+${referral.total >= 9 ? "✅ Available" : `⭐ Need ${9-referral.total}`}
+</div>
+</div>
+
+<!-- TIER -->
+
+<div style="
+margin-top:15px;
+padding-top:15px;
+border-top:1px solid #eee;
+font-size:15px;
+font-weight:bold;
+">
+<b>
+${referral.total >= 50 ? "💎 Tier: Platinum" :
+referral.total >= 35 ? "🥇 Tier: Gold" :
+referral.total >= 20 ? "🥈 Tier: Silver" :
+referral.total >= 9 ? "🥉 Tier: Bronze" :
+"👤 Tier: Member"}
+</b>
+
+</div>
+
+<!-- DISCOUNT TIERS -->
+
+<div style="margin-top:10px;">
+
+<div class="reward-item">
+
+<div class="reward-left">
+<b>🥉 Bronze</b>
+
+<div class="small">
+${settings.referralDiscountBronze || 5}% Discount
+</div>
+
+</div>
+<div class="badge">
+${referral.total >= 9
+? "✅ Available"
+: `⭐ Need ${9-referral.total} more referrals`}
+</div>
+
+</div>
+
+<div class="reward-item">
+<div class="reward-left">
+
+<b>🥈 Silver</b>
+
+<div class="small">
+${settings.referralDiscountSilver || 10}% Discount
+</div>
+
+</div>
+<div class="badge">
+${referral.total >= 20
+? "✅ Available"
+: `⭐ Need ${20-referral.total} more referrals`}
+</div>
+
+</div>
+
+<div class="reward-item">
+<div class="reward-left">
+
+<b>🥇 Gold</b>
+
+<div class="small">
+${settings.referralDiscountGold || 15}% Discount
+</div>
+
+</div>
+
+<div class="badge">
+${referral.total >= 35
+? "✅ Available"
+: `⭐ Need ${35-referral.total} more referrals`}
+</div>
+
+</div>
+
+<div class="reward-item">
+<div class="reward-left">
+
+<b>💎 Platinum</b>
+
+<div class="small">
+${settings.referralDiscountPlatinum || 20}% Discount
+</div>
+
+</div>
+
+<div class="badge">
+${referral.total >= 50
+? "✅ Available"
+: `⭐ Need ${50-referral.total} more referrals`}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+<div class="title">🛍 Reward Catalog</div>${renderCatalog(m.catalog || [], points.balance)}
+</div>
+
+`;
+
+}
+
+function renderCatalog(catalog, points){
+
+let html="";
+
+catalog.forEach(item=>{
+
+const diff = Math.max(item.points - points, 0);
+const can = points >= item.points;
+
+html+=`
+<div class="reward-card ${can?"":"disabled"}">
+<div class="reward-info">
+<b>${item.reward}</b><br>
+<div class="small">${item.points} pts</div>
+</div>
+
+<div class="badge">
+${can ? "✅ Available" : "⭐ Need "+diff+" pts"}
+</div>
+</div>
+`;
+});
+
+return html;
+}
+
+function normalizePhone(input){
+let phone=input.value.replace(/[^0-9]/g,"");
+if(phone.startsWith("0")) phone="6"+phone;
+if(!phone.startsWith("60")) phone="60"+phone;
+input.value=phone;
+}
+
+</script>
+
+</body>
+</html>
