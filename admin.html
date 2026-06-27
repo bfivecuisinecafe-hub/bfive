@@ -155,7 +155,7 @@ document.getElementById("tbody").innerHTML =
 "<tr><td colspan='6'>Loading...</td></tr>";
 
 let res = await fetch(
-"https://script.google.com/macros/s/AKfycbyw_wc2HirKbFq6Yn6sL2YC_SpXZb0J5K2Kd-k0uKYfRTwhXHg6sy_RbFzSYV6w8NCp5A/exec?mode=admin_members"
+"https://script.google.com/macros/s/AKfycbxhEOzgr23fH-ooOfYPl9QqDMAvX_w7sC3bDjt9ErImqSROb8Qfvkkl-EWy7hRwr_H-/exec?mode=admin_members"
 );
 
 let data = await res.json();
@@ -245,7 +245,7 @@ let m = filtered[i];
 m[field] = value;
 
 let url =
-`https://script.google.com/macros/s/AKfycbyw_wc2HirKbFq6Yn6sL2YC_SpXZb0J5K2Kd-k0uKYfRTwhXHg6sy_RbFzSYV6w8NCp5A/exec?mode=admin_update_member`
+`https://script.google.com/macros/s/AKfycbxhEOzgr23fH-ooOfYPl9QqDMAvX_w7sC3bDjt9ErImqSROb8Qfvkkl-EWy7hRwr_H-/exec?mode=admin_update_member`
 + `&row=${m.row}`
 + `&name=${encodeURIComponent(m.name)}`
 + `&phone=${encodeURIComponent(m.phone)}`
@@ -314,7 +314,7 @@ async function view(row){
 try{
 
 let res = await fetch(
-`https://script.google.com/macros/s/AKfycbyw_wc2HirKbFq6Yn6sL2YC_SpXZb0J5K2Kd-k0uKYfRTwhXHg6sy_RbFzSYV6w8NCp5A/exec?mode=admin_member_detail&row=${row}`
+`https://script.google.com/macros/s/AKfycbxhEOzgr23fH-ooOfYPl9QqDMAvX_w7sC3bDjt9ErImqSROb8Qfvkkl-EWy7hRwr_H-/exec?mode=admin_member_detail&row=${row}`
 );
 
 let data = await res.json();
