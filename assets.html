@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>B5 Asset Library V4</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#f7f1e8,#efe4d3,#e5d5bf);
+padding:30px;
+color:#5e4630;
+min-height:100vh;
+}
+
+.header{
+text-align:center;
+margin-bottom:30px;
+}
+
+.header h1{
+font-size:42px;
+}
+
+.header p{
+color:#82654a;
+margin-top:5px;
+}
+
+.search{
+max-width:500px;
+margin:20px auto 40px;
+}
+
+.search input{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+font-size:15px;
+}
+
+.section{
+margin-bottom:45px;
+}
+
+.section-title{
+font-size:22px;
+font-weight:bold;
+margin-bottom:15px;
+}
+
+.count{
+font-size:13px;
+color:#82654a;
+margin-left:8px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:16px;
+}
+
+.card{
+background:#fff;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+transition:.2s;
+}
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+.card img{
+width:100%;
+height:170px;
+object-fit:cover;
+display:block;
+background:#f3f3f3;
+}
+
+.info{
+padding:12px;
+}
+
+.filename{
+font-size:12px;
+font-weight:bold;
+margin-bottom:10px;
+word-break:break-word;
+}
+
+.btn{
+width:100%;
+padding:9px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+background:#6b4e36;
+color:#fff;
+font-size:12px;
+}
+
+.btn:hover{
+opacity:.9;
+}
+
+.loading{
+text-align:center;
+padding:40px;
+}
+
+.footer{
+text-align:center;
+margin-top:40px;
+font-size:12px;
+color:#82654a;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>🖼️ B5 Asset Library</h1>
+<p>GitHub → Cloudflare Auto Sync (Stable V4)</p>
+</div>
+
+<div class="search">
+<input id="search" placeholder="Search assets..." onkeyup="filter()">
+</div>
+
+<div id="loading" class="loading">Loading...</div>
+<div id="content"></div>
+
+<div class="footer">
+B5 Platform Assets © 2026
+</div>
+
+<script>
+
+const OWNER = "bestfivecc-b5membership";
+const REPO = "b5platform";
+
+const CATEGORIES = [
+{folder:"food",title:"🍔 Food"},
+{folder:"rewards",title:"🎁 Rewards"},
+{folder:"promo",title:"🔥 Promo"},
+{folder:"logos",title:"🏷 Logos"},
+{folder:"wheel",title:"🎡 Wheel"},
+{folder:"birthday",title:"🎂 Birthday"},
+{folder:"voucher",title:"🎟 Voucher"},
+{folder:"images",title:"📦 Images"},
+{folder:"archive",title:"🗄 Archive"}
+];
+
+function getUrl(folder,file){
+return `https://app.b5membership.com/assets/${folder}/${file}?v=${Date.now()}`;
+}
+
+async function loadAll(){
+
+for(let c of CATEGORIES){
+await loadCategory(c);
+}
+
+document.getElementById("loading").style.display="none";
+}
+
+async function loadCategory(cat){
+
+try{
+
+const api = `https://api.github.com/repos/${OWNER}/${REPO}/contents/assets/${cat.folder}`;
+
+const res = await fetch(api);
+const data = await res.json();
+
+const images = data.filter(f=>
+f.name.match(/\.(png|jpg|jpeg|webp|gif)$/i)
+);
+
+const section = document.createElement("div");
+section.className="section";
+
+section.innerHTML=`
+<div class="section-title">
+${cat.title}
+<span class="count">(${images.length})</span>
+</div>
+<div class="grid"></div>
+`;
+
+const grid = section.querySelector(".grid");
+
+images.forEach(file=>{
+
+const url = getUrl(cat.folder,file.name);
+
+const fallback = `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/assets/${cat.folder}/${file.name}`;
+
+const card = document.createElement("div");
+card.className="card";
+
+card.innerHTML=`
+<img src="${url}"
+onerror="this.src='${fallback}'">
+
+<div class="info">
+<div class="filename">${file.name}</div>
+<button class="btn" onclick="copy('${url}')">Copy URL</button>
+</div>
+`;
+
+grid.appendChild(card);
+});
+
+document.getElementById("content").appendChild(section);
+
+}catch(e){
+console.log("error",cat.folder,e);
+}
+
+}
+
+function copy(text){
+navigator.clipboard.writeText(text);
+alert("Copied:\n"+text);
+}
+
+function filter(){
+let v=document.getElementById("search").value.toLowerCase();
+document.querySelectorAll(".card").forEach(c=>{
+c.style.display=c.innerText.toLowerCase().includes(v)?"block":"none";
+});
+}
+
+loadAll();
+
+</script>
+
+</body>
+</html>

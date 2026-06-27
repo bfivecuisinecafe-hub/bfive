@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Member Dashboard V3 FINAL</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f7f1e8;
+padding:20px;
+color:#5e4630;
+}
+
+.box{
+background:white;
+padding:18px;
+border-radius:14px;
+margin-bottom:14px;
+box-shadow:0 8px 18px rgba(0,0,0,0.08);
+}
+
+*{box-sizing:border-box;}
+
+input, button{
+width:100%;
+max-width:100%;
+padding:12px;
+border-radius:10px;
+margin-bottom:10px;
+font-size:14px;
+}
+
+input{
+border:1px solid #ddd;
+outline:none;
+}
+
+input:focus{
+border-color:#6b4e36;
+box-shadow:0 0 0 2px rgba(107,78,54,0.15);
+}
+
+/* MAIN BUTTON */
+button{
+border:none;
+background:#6b4e36;
+color:white;
+cursor:pointer;
+}
+
+/* REDEEM BUTTON (RESTORED BIG STYLE) */
+.redeem-btn{
+background:#6b4e36;
+color:white;
+border:none;
+padding:10px 14px;
+border-radius:10px;
+cursor:pointer;
+font-size:13px;
+min-width:90px;
+}
+
+.redeem-btn:disabled{
+background:#ccc;
+cursor:not-allowed;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+padding:10px 0;
+border-bottom:1px solid #eee;
+}
+
+.small{
+font-size:12px;
+color:#888;
+}
+
+.click{cursor:pointer;font-weight:bold;}
+.hidden{display:none;}
+.loading{text-align:center;padding:20px;font-weight:bold;}
+
+.copy-btn{
+margin-top:6px;
+padding:6px;
+font-size:12px;
+background:#444;
+border-radius:6px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="box" id="searchBox">
+
+<h2>👤 Member Lookup</h2>
+
+<input id="phone" placeholder="Phone Number" onblur="normalizePhone(this)">
+<input id="email" placeholder="Email">
+<button onclick="search()">Search</button>
+
+</div>
+
+<div id="result"></div>
+
+<script>
+
+function toggle(id){
+const el=document.getElementById(id);
+if(!el) return;
+el.classList.toggle("hidden");
+}
+
+function copyText(text){
+navigator.clipboard.writeText(text);
+alert("Copied");
+}
+
+// =====================
+// REDEEM API
+// =====================
+async function redeem(phone, reward, points, staff){
+
+const url =
+"https://script.google.com/macros/s/AKfycbyw_wc2HirKbFq6Yn6sL2YC_SpXZb0J5K2Kd-k0uKYfRTwhXHg6sy_RbFzSYV6w8NCp5A/exec"
++ "?mode=redeem"
++ "&phone=" + encodeURIComponent(phone)
++ "&reward=" + encodeURIComponent(reward)
++ "&points=" + encodeURIComponent(points)
++ "&staff=" + encodeURIComponent(staff);
+
+let res=await fetch(url);
+let data=await res.json();
+
+alert(data.status==="ok"
+? "Redeemed! Remaining: "+data.remaining
+: "Failed: "+data.status
+);
+
+search();
+}
+
+// =====================
+// CONFIRM REDEEM
+// =====================
+async function confirmRedeem(phone, reward, points){
+
+let staff = prompt("Staff Name:");
+
+if(!staff || staff.trim().length < 2){
+alert("Invalid staff name");
+return;
+}
+
+let ok = confirm(
+`Confirm Redeem?\n\nReward: ${reward}\nPoints: ${points}\nStaff: ${staff}`
+);
+
+if(!ok) return;
+
+await redeem(phone, reward, points, staff.trim());
+}
+
+// =====================
+// CATALOG
+// =====================
+function renderCatalog(catalog, points, phone){
+
+if(!catalog) return "";
+
+let html="<div class='box'><h3>🎁 Reward Catalog</h3>";
+
+catalog.sort((a,b)=>a.points-b.points).forEach(item=>{
+
+const can = points >= item.points;
+
+html+=`
+<div class="row" style="align-items:center;">
+
+<div style="display:flex;gap:10px;align-items:center;">
+
+${item.image ? `
+<img src="${item.image}"
+style="
+width:60px;
+height:60px;
+border-radius:8px;
+object-fit:cover;
+border:1px solid #eee;
+">
+` : ""}
+
+<div>
+<b>${item.reward}</b><br>
+<span class="small">${item.points} pts</span>
+</div>
+
+</div>
+
+<div>
+<button class="redeem-btn"
+${can ? "" : "disabled"}
+onclick="confirmRedeem('${phone}','${item.reward}',${item.points})">
+Redeem
+</button>
+</div>
+
+</div>
+`;
+});
+
+html+="</div>";
+return html;
+}
+// =====================
+// HISTORY
+// =====================
+function renderHistory(history){
+
+if(!history || history.length===0){
+return `
+<div class="box">
+<h3>📜 Redeem History</h3>
+No redemption yet
+</div>
+`;
+}
+
+let html=`<div class="box"><h3>📜 Redeem History</h3>`;
+
+history.forEach(item=>{
+html+=`
+<div class="row">
+<div>
+<b>${item.reward}</b><br>
+<span class="small">${item.date}</span>
+</div>
+<div>-${item.points} pts</div>
+</div>
+`;
+});
+
+html+="</div>";
+return html;
+}
+
+// =====================
+// SEARCH
+// =====================
+async function search(){
+
+let phone=document.getElementById("phone").value.trim();
+let email=document.getElementById("email").value.trim();
+
+if(!phone && !email){
+alert("Enter phone or email");
+return;
+}
+
+document.getElementById("result").innerHTML=
+"<div class='loading'>Searching...</div>";
+
+let url="https://script.google.com/macros/s/AKfycbyw_wc2HirKbFq6Yn6sL2YC_SpXZb0J5K2Kd-k0uKYfRTwhXHg6sy_RbFzSYV6w8NCp5A/exec?mode=member";
+
+if(phone) url+="&phone="+phone;
+if(email) url+="&email="+email;
+
+let res=await fetch(url);
+let data=await res.json();
+
+if(data.status!=="ok"){
+document.getElementById("result").innerHTML=
+"<div class='box'>No member found</div>";
+return;
+}
+
+document.getElementById("searchBox").style.display="none";
+
+let m=data.data;
+
+document.getElementById("result").innerHTML=`
+
+<div class="box">
+<button onclick="location.reload()">🔍 New Search</button>
+</div>
+
+<div class="box">
+<h2>${m.profile.name}</h2>
+${m.profile.phone}<br>
+${m.profile.email}
+</div>
+
+<div class="box">
+<h3>💰 Current Points</h3>
+<div style="font-size:34px;font-weight:bold;">
+${m.points.balance}
+</div>
+Cycle Start: ${safeDateDisplay(m.points.cycleStart)}<br>
+Expiry: ${safeDateDisplay(m.points.expiry)}
+</div>
+
+`;
+
+document.getElementById("result").innerHTML +=
+renderCatalog(m.catalog, m.points.balance, m.profile.phone);
+
+document.getElementById("result").innerHTML +=
+renderHistory(m.history);
+
+}
+
+// =====================
+// PHONE FORMAT
+// =====================
+function normalizePhone(input){
+let phone = input.value.trim();
+phone = phone.replace(/[^0-9]/g,'');
+if(phone.startsWith("0")) phone = "6" + phone;
+if(!phone.startsWith("60")) phone = "60" + phone;
+input.value = phone;
+}
+
+// =====================
+// DATE SAFE
+// =====================
+function safeDateDisplay(dateStr){
+if(!dateStr) return "-";
+if(typeof dateStr === "string" && dateStr.includes("/")) return dateStr;
+
+let d = new Date(dateStr);
+let day = String(d.getDate()).padStart(2,'0');
+let month = String(d.getMonth()+1).padStart(2,'0');
+let year = d.getFullYear();
+
+return `${day}/${month}/${year}`;
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>B5 Cuisine Cafe Membership</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<style>
+
+:root{
+  --primary:#c89b52;
+  --primary-dark:#a87f3f;
+
+  --cream:#f5efe6;
+  --cream-2:#eadfce;
+  --brown:#5e4630;
+  --brown-soft:#82654a;
+
+  --white:#ffffff;
+
+  --success:#22c55e;
+  --danger:#ef4444;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family: Arial, sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+  color:var(--brown);
+
+  background:
+  linear-gradient(
+    135deg,
+    #f7f1e8,
+    #efe4d3,
+    #e6d6c0
+  );
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+}
+
+.hero-container{
+  width:100%;
+  max-width:1200px;
+
+  display:grid;
+  grid-template-columns:1fr 480px;
+  gap:50px;
+  align-items:center;
+}
+
+.hero-left{
+  padding-right:20px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+
+  padding:10px 18px;
+
+  border-radius:999px;
+
+  background:rgba(255,255,255,0.65);
+
+  border:1px solid rgba(255,255,255,0.8);
+
+  margin-bottom:25px;
+
+  font-size:14px;
+
+  backdrop-filter:blur(10px);
+}
+
+.hero-title{
+  font-size:64px;
+  line-height:1.05;
+  font-weight:700;
+  margin-bottom:25px;
+  color:var(--brown);
+}
+
+.hero-title span{
+  color:var(--primary-dark);
+}
+
+.hero-subtitle{
+  font-size:19px;
+  line-height:1.7;
+  color:#6c533b;
+
+  max-width:650px;
+
+  margin-bottom:35px;
+}
+
+.features{
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+}
+
+.feature-card{
+  background:rgba(255,255,255,0.55);
+
+  border:1px solid rgba(255,255,255,0.75);
+
+  backdrop-filter:blur(12px);
+
+  border-radius:18px;
+
+  padding:18px 20px;
+
+  min-width:180px;
+
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+.feature-title{
+  font-size:16px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.feature-text{
+  font-size:14px;
+  color:#7b6247;
+  line-height:1.5;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.membership-card{
+
+  background:rgba(255,255,255,0.58);
+
+  border:1px solid rgba(255,255,255,0.75);
+
+  backdrop-filter:blur(18px);
+
+  border-radius:30px;
+
+  padding:35px;
+
+  box-shadow:
+  0 20px 60px rgba(0,0,0,0.08),
+  inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.card-header{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.card-title{
+  font-size:34px;
+  margin-bottom:10px;
+  color:var(--brown);
+}
+
+.card-subtitle{
+  color:#7a6046;
+  line-height:1.6;
+  font-size:15px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-group{
+  margin-bottom:18px;
+}
+
+.form-label{
+  display:block;
+  margin-bottom:10px;
+
+  font-size:14px;
+
+  color:#6f563d;
+}
+
+.input-field{
+  width:100%;
+
+  border:none;
+  outline:none;
+
+  background:rgba(255,255,255,0.8);
+
+  border:1px solid rgba(200,155,82,0.2);
+
+  color:var(--brown);
+
+  padding:16px 18px;
+
+  border-radius:16px;
+
+  font-size:16px;
+
+  transition:0.25s ease;
+}
+
+.input-field::placeholder{
+  color:#a58d73;
+}
+
+.input-field:focus{
+  border-color:var(--primary);
+
+  box-shadow:0 0 0 4px rgba(200,155,82,0.18);
+}
+
+.input-field:disabled{
+  opacity:0.75;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.primary-button{
+  width:100%;
+
+  border:none;
+
+  cursor:pointer;
+
+  padding:17px;
+
+  border-radius:16px;
+
+  font-size:17px;
+  font-weight:bold;
+
+  transition:0.25s ease;
+
+  background:
+  linear-gradient(
+    135deg,
+    #d7ad6c,
+    #f3d39d
+  );
+
+  color:#4e3924;
+
+  box-shadow:
+  0 12px 30px rgba(200,155,82,0.25);
+}
+
+.primary-button:hover{
+  transform:translateY(-2px);
+
+  box-shadow:
+  0 18px 35px rgba(200,155,82,0.32);
+}
+
+.primary-button:active{
+  transform:scale(0.98);
+}
+
+.primary-button:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+}
+
+.small-note{
+  margin-top:15px;
+
+  text-align:center;
+
+  color:#8c7258;
+
+  font-size:13px;
+
+  line-height:1.6;
+}
+
+/* =========================
+   SPIN SECTION
+========================= */
+
+.spin-section{
+  margin-top:35px;
+  display:none;
+  animation:fadeUp 0.5s ease;
+}
+
+.spin-title{
+  text-align:center;
+  font-size:26px;
+  margin-bottom:25px;
+  color:var(--brown);
+}
+
+/* =========================
+   WHEEL
+========================= */
+
+.wheel-wrapper{
+  position:relative;
+
+  width:320px;
+  height:320px;
+
+  margin:0 auto 25px;
+}
+
+.wheel-glow{
+  position:absolute;
+  inset:0;
+
+  border-radius:50%;
+
+  background:
+  radial-gradient(
+    circle,
+    rgba(212,170,88,0.35),
+    transparent 70%
+  );
+
+  filter:blur(20px);
+
+  animation:pulse 2.5s infinite;
+}
+
+.wheel-pointer{
+  position:absolute;
+
+  top:-12px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  width:0;
+  height:0;
+
+  border-left:18px solid transparent;
+  border-right:18px solid transparent;
+
+  border-top:40px solid #fff;
+
+  z-index:10;
+
+  filter:drop-shadow(
+    0 4px 10px rgba(0,0,0,0.25)
+  );
+}
+
+.wheel{
+  width:100%;
+  height:100%;
+
+  border-radius:50%;
+
+  transition:
+  transform 4.8s cubic-bezier(
+    0.17,
+    0.67,
+    0.15,
+    1
+  );
+
+  box-shadow:
+  0 0 0 10px rgba(255,255,255,0.5),
+  0 25px 50px rgba(0,0,0,0.12);
+}
+
+.wheel-center{
+  position:absolute;
+
+  width:68px;
+  height:68px;
+
+  border-radius:50%;
+
+  background:
+  linear-gradient(
+    135deg,
+    #d7ad6c,
+    #fff0c8
+  );
+
+  top:50%;
+  left:50%;
+
+  transform:translate(-50%,-50%);
+
+  z-index:9;
+
+  box-shadow:
+  0 8px 25px rgba(0,0,0,0.18),
+  inset 0 2px 8px rgba(255,255,255,0.6);
+}
+
+/* =========================
+   REWARD CARD
+========================= */
+
+.reward-card{
+  display:none;
+
+  margin-top:25px;
+
+  padding:22px;
+
+  border-radius:20px;
+
+  background:
+  rgba(255,255,255,0.55);
+
+  border:1px solid rgba(255,255,255,0.8);
+
+  text-align:center;
+
+  animation:fadeUp 0.5s ease;
+}
+
+.reward-title{
+  font-size:18px;
+  margin-bottom:14px;
+}
+
+.reward-image{
+  width:120px;
+  height:120px;
+
+  object-fit:contain;
+
+  margin-bottom:15px;
+}
+
+.reward-text{
+  font-size:28px;
+  font-weight:bold;
+
+  color:var(--primary-dark);
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+
+  top:25px;
+  right:25px;
+
+  background:#fff;
+
+  color:#5e4630;
+
+  padding:16px 20px;
+
+  border-radius:14px;
+
+  z-index:9999;
+
+  min-width:280px;
+
+  opacity:0;
+
+  transform:translateY(-20px);
+
+  transition:0.3s ease;
+
+  border:1px solid rgba(255,255,255,0.9);
+
+  box-shadow:
+  0 15px 40px rgba(0,0,0,0.1);
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.toast.success{
+  border-left:5px solid var(--success);
+}
+
+.toast.error{
+  border-left:5px solid var(--danger);
+}
+
+/* =========================
+   SUCCESS MODAL
+========================= */
+
+.success-modal{
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,0.35);
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  z-index:10000;
+
+  padding:20px;
+}
+
+.success-content{
+  width:100%;
+  max-width:460px;
+
+  background:#fffdf9;
+
+  border-radius:28px;
+
+  padding:40px 30px;
+
+  text-align:center;
+
+  border:1px solid rgba(255,255,255,0.8);
+
+  animation:fadeUp 0.4s ease;
+}
+
+.success-icon{
+  width:90px;
+  height:90px;
+
+  margin:0 auto 20px;
+
+  border-radius:50%;
+
+  background:rgba(34,197,94,0.12);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:42px;
+}
+
+.success-heading{
+  font-size:32px;
+  margin-bottom:14px;
+}
+
+.success-message{
+  color:#7c6348;
+
+  line-height:1.7;
+
+  margin-bottom:30px;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(25px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes pulse{
+  0%{
+    transform:scale(1);
+    opacity:0.8;
+  }
+  50%{
+    transform:scale(1.05);
+    opacity:1;
+  }
+  100%{
+    transform:scale(1);
+    opacity:0.8;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width:980px){
+
+  .hero{
+    padding:40px 18px;
+  }
+
+  .hero-container{
+    grid-template-columns:1fr;
+    gap:40px;
+  }
+
+  .hero-left{
+    text-align:center;
+    padding-right:0;
+  }
+
+  .hero-title{
+    font-size:46px;
+  }
+
+  .hero-subtitle{
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .features{
+    justify-content:center;
+  }
+
+}
+
+@media (max-width:640px){
+
+  .hero-title{
+    font-size:38px;
+  }
+
+  .membership-card{
+    padding:26px 22px;
+    border-radius:24px;
+  }
+
+  .card-title{
+    font-size:28px;
+  }
+
+  .wheel-wrapper{
+    width:280px;
+    height:280px;
+  }
+
+  .feature-card{
+    width:100%;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<!-- SUCCESS MODAL -->
+<div class="success-modal" id="successModal">
+
+  <div class="success-content">
+
+    <div class="success-icon">
+      ✓
+    </div>
+
+    <h2 class="success-heading">
+      Membership Activated
+    </h2>
+
+    <p class="success-message">
+
+      🎉 Reward Claimed! 🎉<br>
+Please check your email for your reward details.
+      
+      <br><br>
+<strong>Member Benefits:</strong><br>
+    ✅ Exclusive Promotions<br>
+    ✅ Birthday Rewards<br>
+    ✅ Member Specials
+<br><br>
+
+      <strong>📲 Join B5 VIP Deals:</strong>
+
+    </p>
+
+    <button
+      class="primary-button"
+      onclick="joinWhatsAppChannel()"
+    >
+      Join Now
+    </button>
+
+  </div>
+
+</div>
+
+<!-- HERO -->
+<section class="hero">
+
+<div class="hero-container">
+
+<!-- LEFT -->
+<div class="hero-left">
+
+<div class="badge">
+🎉 B5 Cuisine Cafe Membership
+</div>
+
+<h1 class="hero-title">
+Spin & Win <br>
+Exclusive <span>Member Rewards</span>
+</h1>
+
+<p class="hero-subtitle">
+Join the B5 Membership Program to enjoy birthday rewards,
+exclusive promotions, member-only gifts and exciting Spin & Win prizes.
+</p>
+
+<div class="features">
+
+<div class="feature-card">
+<div class="feature-title">
+🎂 Birthday Rewards
+</div>
+
+<div class="feature-text">
+Receive special birthday gifts and member surprises.
+</div>
+</div>
+
+<div class="feature-card">
+<div class="feature-title">
+🎁 Exclusive Promotions
+</div>
+
+<div class="feature-text">
+Unlock member-only deals and seasonal campaigns.
+</div>
+</div>
+
+<div class="feature-card">
+<div class="feature-title">
+⭐ Earn Points
+</div>
+
+<div class="feature-text">
+Collect points and enjoy future redemption benefits.
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- RIGHT -->
+<div class="membership-card">
+
+<div class="card-header">
+
+<h2 class="card-title">
+Join Membership
+</h2>
+
+<p class="card-subtitle">
+Register using your real details to receive rewards,
+birthday gifts and future member promotions.
+</p>
+
+</div>
+
+<!-- FORM -->
+
+<div class="form-group">
+<label class="form-label">
+Full Name
+</label>
+
+<input
+type="text"
+id="name"
+class="input-field"
+placeholder="Enter your name"
+/>
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Phone Number
+</label>
+
+<input
+type="text"
+id="phone"
+class="input-field"
+placeholder="60123456789"
+/>
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Email Address
+</label>
+
+<input
+type="email"
+id="email"
+class="input-field"
+placeholder="Enter your email"
+/>
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Date of Birth
+</label>
+
+<input
+type="date"
+id="birthday"
+class="input-field"
+/>
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Referral Phone (Optional)
+</label>
+
+<input
+type="text"
+id="referredBy"
+class="input-field"
+placeholder="601XXXXXXXX"
+/>
+</div>
+
+<button
+class="primary-button"
+id="registerButton"
+onclick="registerUser()"
+>
+Join Membership
+</button>
+
+<div class="small-note">
+By joining, you may receive reward notifications,
+birthday gifts and future promotional campaigns.
+</div>
+
+<!-- SPIN SECTION -->
+
+<div class="spin-section" id="spin-section">
+
+<h3 class="spin-title">
+Spin The Wheel
+</h3>
+
+<div class="wheel-wrapper">
+
+<div class="wheel-glow"></div>
+
+<div class="wheel-pointer"></div>
+
+<!-- CHANGE WHEEL TEMPLATE HERE -->
+<img
+src="https://app.b5membership.com/assets/wheel/wheel-1.png?v=1780664774160"
+class="wheel"
+id="wheel"
+/>
+
+<div class="wheel-center"></div>
+
+</div>
+
+<button
+class="primary-button"
+id="spin-button"
+>
+Start Spinning
+</button>
+
+<div class="reward-card" id="reward-card">
+
+<div class="reward-title">
+🎉 Congratulations! You won:
+</div>
+
+<img
+id="reward-image"
+class="reward-image"
+src=""
+/>
+
+<div
+class="reward-text"
+id="reward-text"
+></div>
+
+</div>
+
+<button
+class="primary-button"
+id="submit-button"
+onclick="submitToGoogleSheets()"
+style="display:none; margin-top:20px;"
+>
+Claim My Reward
+</button>
+
+</div>
+
+</div>
+</div>
+</section>
+
+<script>
+
+/* =========================
+   GLOBAL STATE
+========================= */
+
+let registered = false;
+let spinning = false;
+let reward = "";
+
+/* =========================
+   REWARD CONFIG
+========================= */
+
+/*
+IMPORTANT:
+
+WHEEL ORDER MUST MATCH THIS ORDER
+
+30°
+90°
+150°
+210°
+270°
+330°
+
+CLOCKWISE
+*/
+
+const rewards = [
+
+{
+  name:"Thai Style Tofu",        // 30° 右上
+  image:"https://app.b5membership.com/assets/images/thaistyletofu.png?v=1780664775209"
+},
+
+{
+  name:"Souffle",     // 90° 右
+  image:"https://app.b5membership.com/assets/images/souffle.png?v=1780664775209"
+},
+
+{
+  name:"French Fries", // 150° 右下
+  image:"https://app.b5membership.com/assets/images/frenchfries.png?v=1780664775209"
+},
+
+{
+  name:"Honey Lemon",      // 210° 左下
+  image:"https://app.b5membership.com/assets/images/honeylemon.png?v=1780664775209"
+},
+
+{
+  name:"Coffee",    // 270° 左
+  image:"https://app.b5membership.com/assets/images/latte.png?v=1780664775209"
+},
+
+{
+  name:"Slice Cake",   // 330° 左上
+  image:"https://app.b5membership.com/assets/images/cake.png?v=1780664775209"
+}
+
+];
+
+/* =========================
+   FIXED REWARD ANGLES
+========================= */
+
+const rewardAngles = [
+  30,
+  90,
+  150,
+  210,
+  270,
+  330
+];
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message, type="success"){
+
+const toast = document.getElementById("toast");
+
+toast.innerText = message;
+
+toast.className = `toast show ${type}`;
+
+setTimeout(() => {
+  toast.classList.remove("show");
+},3500);
+
+}
+
+/* =========================
+   PHONE AUTO FORMAT
+========================= */
+
+document
+.getElementById("phone")
+.addEventListener("blur", function(){
+
+let value = this.value.trim();
+
+if(value.startsWith("0")){
+  this.value = "6" + value;
+}
+
+});
+
+document
+.getElementById("referredBy")
+.addEventListener("blur", function(){
+
+let value = this.value.trim();
+
+if(value.startsWith("0")){
+  this.value = "6" + value;
+}
+else if(value && !value.startsWith("60")){
+  this.value = "60" + value;
+}
+
+});
+
+/* =========================
+   VALIDATION
+========================= */
+
+async function validateBeforeRegister(){
+
+const email =
+document.getElementById("email").value.trim();
+
+const phone =
+document.getElementById("phone").value.trim();
+
+const referredBy =
+document.getElementById("referredBy").value.trim();
+
+const emailPattern =
+/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+if(!emailPattern.test(email)){
+
+showToast(
+"Please enter a valid email address.",
+"error"
+);
+
+return false;
+
+}
+
+const phonePattern = /^60\d{8,11}$/;
+
+if(!phonePattern.test(phone)){
+
+showToast(
+"Phone number must start with 60 and contain 10-13 digits.",
+"error"
+);
+
+return false;
+
+}
+
+/* GOOGLE APPS SCRIPT VALIDATION */
+
+const apiUrl =
+"https://script.google.com/macros/s/AKfycbyw_wc2HirKbFq6Yn6sL2YC_SpXZb0J5K2Kd-k0uKYfRTwhXHg6sy_RbFzSYV6w8NCp5A/exec?email=" +
+encodeURIComponent(email) +
+"&phone=" +
+encodeURIComponent(phone) +
+"&referredBy=" +
+encodeURIComponent(referredBy);
+
+try{
+
+const response = await fetch(apiUrl);
+
+const result = await response.json();
+
+if(result.status === "exists"){
+
+showToast(
+"This email or phone already exists.",
+"error"
+);
+
+return false;
+
+}
+
+if(result.status === "invalid_referral_self"){
+
+showToast(
+"You cannot refer yourself.",
+"error"
+);
+
+return false;
+
+}
+
+if(result.status === "invalid_referral_notfound"){
+
+showToast(
+"Referral phone not found.",
+"error"
+);
+
+return false;
+
+}
+
+return true;
+
+}catch(error){
+
+showToast(
+"Unable to validate registration.",
+"error"
+);
+
+return false;
+
+}
+
+}
+
+/* =========================
+   REGISTER
+========================= */
+
+async function registerUser(){
+
+if(!(await validateBeforeRegister())) return;
+
+const name =
+document.getElementById("name").value.trim();
+
+const phone =
+document.getElementById("phone").value.trim();
+
+const email =
+document.getElementById("email").value.trim();
+
+const birthday =
+document.getElementById("birthday").value.trim();
+
+if(!name || !phone || !email || !birthday){
+
+showToast(
+"Please complete all required fields.",
+"error"
+);
+
+return;
+
+}
+
+/* LOCK FORM */
+
+[
+"name",
+"phone",
+"email",
+"birthday",
+"referredBy"
+].forEach(id => {
+
+document.getElementById(id).disabled = true;
+
+});
+
+document.getElementById(
+"registerButton"
+).disabled = true;
+
+document.getElementById(
+"registerButton"
+).innerText = "Registration Complete";
+
+registered = true;
+
+document.getElementById(
+"spin-section"
+).style.display = "block";
+
+document.getElementById(
+"spin-section"
+).scrollIntoView({
+behavior:"smooth"
+});
+
+}
+
+/* =========================
+   SPIN BUTTON
+========================= */
+
+document
+.getElementById("spin-button")
+.addEventListener("click", function(){
+
+if(!registered){
+
+showToast(
+"Please register first.",
+"error"
+);
+
+return;
+
+}
+
+spinWheel();
+
+});
+
+/* =========================
+   PERFECT DETERMINISTIC SPIN
+========================= */
+
+function spinWheel(){
+
+if(spinning) return;
+
+spinning = true;
+
+const wheel =
+document.getElementById("wheel");
+
+const rewardIndex =
+Math.floor(Math.random() * rewards.length);
+
+const selectedReward =
+rewards[rewardIndex];
+
+reward = selectedReward.name;
+
+const angle = rewardAngles[rewardIndex];
+
+const extraSpins =
+360 * 6;
+
+const finalRotation =
+extraSpins + (360 - angle);
+
+wheel.style.transform =
+`rotate(${finalRotation}deg)`;
+
+/* BUTTON */
+
+document.getElementById(
+"spin-button"
+).disabled = true;
+
+document.getElementById(
+"spin-button"
+).innerText = "Spinning...";
+
+/* AFTER SPIN */
+
+setTimeout(() => {
+
+document.getElementById(
+"reward-text"
+).innerText = reward;
+
+document.getElementById(
+"reward-image"
+).src = selectedReward.image;
+
+document.getElementById(
+"reward-card"
+).style.display = "block";
+
+document.getElementById(
+"submit-button"
+).style.display = "block";
+
+document.getElementById(
+"spin-button"
+).innerText = "Spin Completed";
+
+spinning = false;
+
+document.getElementById(
+"reward-card"
+).scrollIntoView({
+behavior:"smooth"
+});
+
+},4800);
+
+}
+
+/* =========================
+   SUBMIT
+========================= */
+
+async function submitToGoogleSheets(){
+
+const submitButton =
+document.getElementById("submit-button");
+
+submitButton.disabled = true;
+
+submitButton.innerText = "Submitting...";
+
+if(!reward){
+
+showToast(
+"Please spin the wheel first.",
+"error"
+);
+
+submitButton.disabled = false;
+
+submitButton.innerText = "Claim My Reward";
+
+return;
+
+}
+
+const name =
+document.getElementById("name").value;
+
+const phone =
+document.getElementById("phone").value;
+
+const email =
+document.getElementById("email").value;
+
+const birthday =
+document.getElementById("birthday").value;
+
+const referredBy =
+document.getElementById("referredBy").value.trim();
+
+const timestamp =
+new Date().toLocaleString();
+
+const expiration = new Date();
+
+expiration.setDate(
+expiration.getDate() + 7
+);
+
+const formData = new FormData();
+
+formData.append("timestamp", timestamp);
+formData.append("name", name);
+formData.append("phone", phone);
+formData.append("email", email);
+formData.append("birthday", birthday);
+formData.append("referredBy", referredBy);
+
+formData.append("reward", reward);
+
+formData.append("points", "0");
+
+formData.append("status", "Pending");
+
+formData.append(
+"expirationDate",
+expiration.toLocaleDateString()
+);
+
+formData.append("redeem", "");
+
+formData.append(
+"secret",
+"B5MEMBERSHIP2026"
+);
+
+try{
+
+const response = await fetch(
+"https://script.google.com/macros/s/AKfycbyw_wc2HirKbFq6Yn6sL2YC_SpXZb0J5K2Kd-k0uKYfRTwhXHg6sy_RbFzSYV6w8NCp5A/exec",
+{
+method:"POST",
+body:formData
+}
+);
+
+await response.text();
+
+document.getElementById(
+"successModal"
+).style.display = "flex";
+
+}catch(error){
+
+console.error(error);
+
+showToast(
+"Submission failed. Please try again.",
+"error"
+);
+
+submitButton.disabled = false;
+
+submitButton.innerText = "Claim My Reward";
+
+}
+
+}
+
+/* =========================
+   SUCCESS MODAL
+========================= */
+
+function joinWhatsAppChannel(){
+
+  window.open(
+    "https://whatsapp.com/channel/0029VbCyzvnIyPtSkGJl6B0K",
+    "_blank"
+  );
+
+  setTimeout(() => {
+    location.reload();
+  }, 500);
+
+}
+</script>
+
+</body>
+</html>
